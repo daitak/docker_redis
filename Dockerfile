@@ -10,10 +10,9 @@ RUN yum -y install redis --enablerepo=remi
 RUN sed -i -e "s/^bind 127.0.0.1/bind 0.0.0.0/g" /etc/redis.conf 
 
 RUN useradd docker
-RUN mkdir /home/docker/.ssh
-ADD authorized_keys /home/docker/.ssh/authorized_keys
-RUN chown -R docker:docker /home/docker/.ssh
-RUN chmod 600 /home/docker/.ssh/authorized_keys
+ADD passwd.txt /tmp/passwd.txt
+RUN chpasswd < /tmp/passwd.txt
+RUN rm /tmp/passwd.txt
 RUN echo "docker ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers.d/docker
 
 EXPOSE 22 6379
